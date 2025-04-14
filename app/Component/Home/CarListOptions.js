@@ -1,5 +1,5 @@
 
-import { carListData } from '@/utils/carListData';
+import { carListData } from '../../../utils/carListData';
 import CarListItems from './carListItmes';
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
