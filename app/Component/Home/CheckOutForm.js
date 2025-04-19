@@ -44,7 +44,8 @@ function CheckOutForm({ amount }) {
         clientSecret: response.clientSecret,
         elements,
         confirmParams: {
-          return_url: 'http://localhost:3000/success', // or your deployed URL
+          return_url: `${window.location.origin}/success`,
+ 
         },
       });
 
