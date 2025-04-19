@@ -1,34 +1,23 @@
-"use client";
+'use client';
 
-import { Elements } from "@stripe/react-stripe-js";
-import { loadStripe } from "@stripe/stripe-js";
-import { useSearchParams } from "next/navigation";
-import React, { Suspense } from "react";
-import CheckOutForm from "../Component/Home/CheckOutForm";
+import { useSearchParams } from 'next/navigation';
 
-function PaymentComponent() {
+export default function SuccessPage() {
+  
   const searchParams = useSearchParams();
-  const amount = searchParams.get("amount");
-
-  const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHER_KEY);
-
-  const options = {
-    mode: "payment",
-    amount: Math.round(amount * 100),
-    currency: "inr",
-  };
+  const paymentIntent = searchParams.get('payment_intent');
+  const redirectStatus = searchParams.get('redirect_status');
 
   return (
-    <Elements stripe={stripePromise} options={options}>
-      <CheckOutForm amount={amount} />
-    </Elements>
-  );
-}
-
-export default function Payment() {
-  return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <PaymentComponent />
-    </Suspense>
+    <div className="flex flex-col items-center justify-center h-screen px-4 text-center">
+      <h1 className="text-4xl font-bold text-green-600 mb-4">🎉 Thank You!</h1>
+      <p className="text-lg mb-2">Your payment was successful.</p>
+      {redirectStatus && (
+        <p className="text-sm text-gray-500">Status: {redirectStatus}</p>
+      )}
+      {paymentIntent && (
+        <p className="text-sm text-gray-400">Payment ID: {paymentIntent}</p>
+      )}
+    </div>
   );
 }
