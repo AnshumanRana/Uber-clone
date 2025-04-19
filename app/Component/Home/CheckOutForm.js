@@ -1,3 +1,4 @@
+'use client';
 import { PaymentElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import React, { useState } from 'react';
 
@@ -28,7 +29,7 @@ function CheckOutForm({ amount }) {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ amount: Math.round(amount) }), 
+        body: JSON.stringify({ amount: Math.round(amount) }),
       });
 
       const response = await res.json();
@@ -36,18 +37,14 @@ function CheckOutForm({ amount }) {
       if (!response.clientSecret) {
         setErrorMessage('Failed to retrieve client secret');
         setLoading(false);
-        console.error('No clientSecret returned:', response);
         return;
       }
 
-      const clientSecret = response.clientSecret;
-
-     
       const result = await stripe.confirmPayment({
-        clientSecret: clientSecret,
+        clientSecret: response.clientSecret,
         elements,
         confirmParams: {
-          return_url: "http://localhost:3000/success", 
+          return_url: 'http://localhost:3000/success', // or your deployed URL
         },
       });
 
@@ -64,7 +61,7 @@ function CheckOutForm({ amount }) {
 
   return (
     <div className="justify-center flex-col text-center flex w-full mt-6 max-w-md mx-auto">
-      <h2 className="m-5 font-bold text-xl">Amount To Pay: ₹{amount }</h2>
+      <h2 className="m-5 font-bold text-xl">Amount To Pay: ₹{amount}</h2>
       <form onSubmit={handleSubmit}>
         <PaymentElement />
         {errorMessage && <p className="text-red-500 mt-2">{errorMessage}</p>}
